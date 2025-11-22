@@ -1,0 +1,74 @@
+import { viteBundler } from '@vuepress/bundler-vite'
+import { defaultTheme } from '@vuepress/theme-default'
+import { defineUserConfig } from 'vuepress'
+
+import eventsV2Sidebar from './config/events-v2'
+import { searchPlugin } from '@vuepress/plugin-search'
+import apiV2Sidebar from './config/api-v2'
+
+
+export default defineUserConfig({
+    bundler: viteBundler(),
+    plugins: [
+        searchPlugin({
+            locales: {
+                '/': {
+                    placeholder: '搜索文档',
+                },
+            },
+        })
+    ],
+    head: [
+        ['link', { rel: 'icon', href: '/logo.png' }]
+    ],
+    theme: defaultTheme({
+        repo: 'https://github.com/17TheWord/queqiao-docs',
+        navbar: [
+            { text: '首页', link: '/' },
+            { text: '简介', link: '/introduction/' },
+            { text: '开始', link: '/start/' },
+            { text: '配置', link: '/config/' },
+            {
+                text: '事件', children: [
+                    { text: 'V2 事件', link: '/events/v2/' },
+                    { text: 'V1 事件', link: '/events/v1.md' },
+                ]
+            },
+            {
+                text: 'API',
+                children: [
+                    { text: 'V2 API', link: '/api/v2/' },
+                    { text: 'V1 API', link: '/api/v1/' },
+                ],
+            },
+        ],
+        sidebar: {
+            "/introduction/": "heading",
+            "/start/": [
+                {
+                    text: '快速开始',
+                    link: '/start/',
+                },
+                {
+                    text: '详细步骤',
+                    link: '/start/steps.md',
+                },
+            ],
+            "/config/": [
+                {
+                    text: '配置信息',
+                    link: '/config/',
+                },
+                {
+                    text: '独立程序额外配置',
+                    link: '/config/vanilla.md',
+                },
+            ],
+            '/events/v2/': eventsV2Sidebar,
+            "/api/v2/": apiV2Sidebar,
+        }
+    }),
+    lang: 'zh-CN',
+    title: '鹊桥',
+    description: 'Minecraft 服务端 Mod/Plugin，实时接收玩家事件、API广播消息',
+})

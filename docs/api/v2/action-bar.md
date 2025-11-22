@@ -1,0 +1,46 @@
+# 🛰️ WebSocket 接口文档
+
+## 📡 接口名称
+
+**状态栏消息接口（`send_actionbar`）**
+
+---
+
+## 🧭 字段描述
+
+| 字段路径 | 类型 | 默认值 | 说明 |
+|-----------|------|--------|------|
+| `message` | `json` | `-` | ActionBar 消息内容。参考 [Minecraft 文本组件](https://zh.minecraft.wiki/w/%E6%96%87%E6%9C%AC%E7%BB%84%E4%BB%B6)。 |
+
+---
+
+## 🧱 数据结构
+
+### 🔹 消息格式
+
+```json
+{
+    "api": "send_actionbar",
+    "data": {
+        "message": [
+            {
+                "text": "actionbar message",
+                "color": "aqua"
+            }
+        ]
+    },
+    "echo": "1"
+}
+```
+
+### 🔹 返回信息
+
+```json
+{
+    "code": 200,
+    "post_type": "response",
+    "status": "SUCCESS",
+    "message": "success",
+    "echo": "1"
+}
+```

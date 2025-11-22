@@ -1,0 +1,51 @@
+# 配置
+
+本页面介绍鹊桥的主要配置项。
+
+```yaml
+enable: true # 是否启用插件/模组
+
+debug: false # DEBUG，开启后会打印所有日志
+
+server_name: "Server" # 服务器名称，当有多个服务器时，请使用不同的命名
+
+access_token: "" # 用于连接时进行验证
+
+# 消息前缀
+# 消息前面添加的前缀（不包含Title、ActionBar）
+# 设置为空时，不会在消息前面添加前缀
+message_prefix: "[鹊桥]"
+
+# WebSocket Server配置项
+websocket_server:
+  enable: true          # 是否启用
+  host: "127.0.0.1"     # WebSocket Server 地址
+  port: 8080            # WebSocket Server 端口
+
+# WebSocket Client配置项
+websocket_client:
+  enable: false                 # 是否启用
+  reconnect_interval: 5         # 重连间隔（秒）
+  reconnect_max_times: 5        # 最大重连次数
+  url_list:
+    - "ws://127.0.0.1:8080/minecraft/ws"
+
+# Rcon 客户端配置项
+rcon:
+  enable: false                # 是否启用
+  port: 25575                  # Rcon 端口
+  password: ""                # Rcon 密码
+
+# 订阅事件配置项
+subscribe_event:
+  player_chat: true         # 玩家聊天事件监听
+  player_death: true        # 玩家死亡事件监听
+  player_join: true         # 玩家登录事件监听
+  player_quit: true         # 玩家退出事件监听
+  player_command: true      # 玩家命令事件监听
+  player_advancement: true  # 玩家成就事件监听
+
+# 忽略的命令列表
+# 例如：["tp"]，则所有以 /tp 起始的命令对应的事件均不会被广播
+ignored_commands: []
+```

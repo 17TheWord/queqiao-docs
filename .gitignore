@@ -1,0 +1,73 @@
+# ========================
+# Node / npm / pnpm / Yarn
+# ========================
+
+# node_modules
+node_modules/
+.pnpm-store/
+.pnp.*
+# pnpm locker
+pnpm-lock.yaml
+# npm lock
+package-lock.json
+# yarn lock
+yarn.lock
+
+# ========================
+# Logs
+# ========================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ========================
+# Runtime data
+# ========================
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# ========================
+# OS Files
+# ========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ========================
+# Environment variables
+# ========================
+.env
+.env.local
+.env.*.local
+
+# ========================
+# VuePress
+# ========================
+# VuePress 默认临时文件目录
+docs/.vuepress/.temp
+# VuePress 默认缓存目录
+docs/.vuepress/.cache
+# VuePress 默认构建生成的静态文件目录
+docs/.vuepress/dist
+
+# ========================
+# Optional IDE / Editor Files
+# ========================
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# ========================
+# Others
+# ========================
+*.swp
+*.tmp
+*.temp
+*.bak
+*.backup
+.wakatime-project
