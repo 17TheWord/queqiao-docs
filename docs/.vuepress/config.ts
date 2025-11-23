@@ -14,12 +14,12 @@ export default defineUserConfig({
         docsearchPlugin({
             appId: "2BHALOOIXH",
             apiKey: "e84ad8d7239ea86cab0d35d04f8fa564",
-            indices: ['queqiao', 'scareye']
+            indices: ['queqiao']
         })
     ],
     head: [
         ['link', { rel: 'icon', href: '/logo.png' }],
-        ['meta', { name: 'algolia-doamin-verification', content: '2B4CB099766AA907' }]
+        ['meta', { name: 'algolia-site-verification', content: '2B4CB099766AA907' }]
     ],
     theme: defaultTheme({
         repo: 'https://github.com/17TheWord/queqiao-docs',
