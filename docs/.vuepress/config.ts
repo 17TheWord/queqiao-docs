@@ -14,7 +14,7 @@ export default defineUserConfig({
         docsearchPlugin({
             appId: "2BHALOOIXH",
             apiKey: "e84ad8d7239ea86cab0d35d04f8fa564",
-            indices: ['queqiao']
+            indices: ['queqiao', 'scareye']
         })
     ],
     head: [
