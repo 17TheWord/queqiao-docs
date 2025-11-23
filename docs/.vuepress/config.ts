@@ -12,9 +12,9 @@ export default defineUserConfig({
     bundler: viteBundler(),
     plugins: [
         docsearchPlugin({
-            appId: "2BHALOOIXH",
-            apiKey: "e84ad8d7239ea86cab0d35d04f8fa564",
-            indices: ['queqiao']
+            appId: "MNY6Z9DZPC",
+            apiKey: "dc7a84515bb4d9e5900c264aeb07f350",
+            indices: ['queqiao_docs_pages_dev_mny6z9dzpc_pages']
         })
     ],
     head: [
