@@ -1,11 +1,12 @@
 import { viteBundler } from '@vuepress/bundler-vite'
 import { defaultTheme } from '@vuepress/theme-default'
 import { defineUserConfig } from 'vuepress'
-
-import eventsV2Sidebar from './config/events-v2'
 import { searchPlugin } from '@vuepress/plugin-search'
-import apiV2Sidebar from './config/api-v2'
 
+import eventsV2Sidebar from './config/sidebar/events-v2'
+import eventsV1Sidebar from './config/sidebar/events-v1'
+import apiV2Sidebar from './config/sidebar/api-v2'
+import apiV1Sidebar from './config/sidebar/api-v1'
 
 export default defineUserConfig({
     bundler: viteBundler(),
@@ -29,9 +30,10 @@ export default defineUserConfig({
             { text: '开始', link: '/start/' },
             { text: '配置', link: '/config/' },
             {
-                text: '事件', children: [
+                text: '事件',
+                children: [
                     { text: 'V2 事件', link: '/events/v2/' },
-                    { text: 'V1 事件', link: '/events/v1.md' },
+                    { text: 'V1 事件', link: '/events/v1/' },
                 ]
             },
             {
@@ -65,7 +67,9 @@ export default defineUserConfig({
                 },
             ],
             '/events/v2/': eventsV2Sidebar,
+            "/events/v1/": eventsV1Sidebar,
             "/api/v2/": apiV2Sidebar,
+            "/api/v1/": apiV1Sidebar,
         }
     }),
     lang: 'zh-CN',
