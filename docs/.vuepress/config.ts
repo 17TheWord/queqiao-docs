@@ -15,10 +15,13 @@ export default defineUserConfig({
             appId: "MNY6Z9DZPC",
             apiKey: "dc7a84515bb4d9e5900c264aeb07f350",
             indices: [
-                'queqiao_docs_pages_dev_mny6z9dzpc_pages',
-                'queqiao_docs_pages_dev_mny6z9dzpc_products',
-                'queqiao_docs_pages_dev_mny6z9dzpc_articles'
-            ]
+                {
+                    name: 'queqiao_docs_pages_dev_mny6z9dzpc_pages',
+                    searchParameters: {
+                        facetFilters: [],
+                    },
+                },
+            ],
         })
     ],
     head: [
