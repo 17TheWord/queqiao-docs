@@ -27,3 +27,13 @@
 | `title`       | `str`        | -            | 标题的 `Key`    |
 | `description` | `str`        | -            | 描述的 `Key`    |
 | `frame`       | `str`        | `task`/`goal`/`challenge` | 显示框架类型 |
+
+## 服务端支持情况
+
+- 不支持 `原版端`、`Velocity`
+
+## 字段缺失统计
+
+- `Spigot` 仅包含 `key`
+- `Forge`
+  - `1.7.10`：`achievement.display.description`

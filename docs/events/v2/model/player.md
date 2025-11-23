@@ -15,3 +15,15 @@
 | `x`                   | `float`      | -            | 坐标 X                  |
 | `y`                   | `float`      | -            | 坐标 Y                  |
 | `z`                   | `float`      | -            | 坐标 Z                  |
+
+## 字段缺失统计
+
+- `原版端` 仅支持 `nickname`
+- `Spigot`：不支持 `max_health`
+- `Paper`：不支持 `max_health`
+- `Folia`：
+  - 不支持 `max_health`
+  - 可能缺失 `address`
+- `Velocity` 仅支持 `nickname`、`uuid`、`is_op`
+- `Forge`
+  - `1.7.10`：缺少 `address`
