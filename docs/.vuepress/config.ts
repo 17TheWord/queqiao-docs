@@ -71,7 +71,7 @@ export default defineUserConfig({
             "/api/v1/": apiV1Sidebar,
         }
     }),
-    // lang: 'zh-CN',
+    lang: 'zh-CN',
     title: '鹊桥',
     description: 'Minecraft 服务端 Mod/Plugin，实时接收玩家事件、API广播消息',
 })
