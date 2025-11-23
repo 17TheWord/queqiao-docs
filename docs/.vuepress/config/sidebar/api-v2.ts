@@ -1,6 +1,6 @@
 export default [
     {
-        text: 'V2 API 总览',
+        text: '总览',
         link: '/api/v2/',
     },
     {
