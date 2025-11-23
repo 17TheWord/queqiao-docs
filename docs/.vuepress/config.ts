@@ -1,7 +1,7 @@
 import { viteBundler } from '@vuepress/bundler-vite'
 import { defaultTheme } from '@vuepress/theme-default'
 import { defineUserConfig } from 'vuepress'
-import { searchPlugin } from '@vuepress/plugin-search'
+import { docsearchPlugin } from '@vuepress/plugin-docsearch'
 
 import eventsV2Sidebar from './config/sidebar/events-v2'
 import eventsV1Sidebar from './config/sidebar/events-v1'
@@ -11,12 +11,9 @@ import apiV1Sidebar from './config/sidebar/api-v1'
 export default defineUserConfig({
     bundler: viteBundler(),
     plugins: [
-        searchPlugin({
-            locales: {
-                '/': {
-                    placeholder: '搜索文档',
-                },
-            },
+        docsearchPlugin({
+            appId: "2BHALOOIXH",
+            apiKey: "e84ad8d7239ea86cab0d35d04f8fa564"
         })
     ],
     head: [
