@@ -19,7 +19,7 @@ export default defineUserConfig({
     ],
     head: [
         ['link', { rel: 'icon', href: '/logo.png' }],
-        ['meta', { name: 'algolia-site-verification', content: '9FAFD74FD6DC4424' }]
+        ['meta', { name: 'algolia-doamin-verification', content: '2B4CB099766AA907' }]
     ],
     theme: defaultTheme({
         repo: 'https://github.com/17TheWord/queqiao-docs',
