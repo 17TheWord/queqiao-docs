@@ -36,4 +36,4 @@
 
 - `Spigot` 仅包含 `key`
 - `Forge`
-  - `1.7.10`：`achievement.display.description`
+  - `1.7.10`：缺失 `achievement.display.description`
