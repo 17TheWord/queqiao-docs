@@ -56,29 +56,6 @@
 
     - 构建后的文件将输出到 `docs/.vuepress/dist` 目录。
 
-## 📚 文档结构
-
-```text
-docs/
-├── README.md              # 首页
-├── introduction/          # 项目介绍
-├── start/                # 快速开始指南
-├── config/               # 配置说明
-├── api/                  # API 文档
-│   ├── v1/              # API v1 版本
-│   └── v2/              # API v2 版本
-└── events/              # 事件文档
-    ├── v1/              # 事件 v1 版本
-    └── v2/              # 事件 v2 版本
-```
-
-## 🛠 技术栈
-
-- **框架**: [VuePress 2](https://v2.vuepress.vuejs.org/)
-- **主题**: [@vuepress/theme-default](https://v2.vuepress.vuejs.org/reference/default-theme/)
-- **构建工具**: [Vite](https://vitejs.dev/)
-- **包管理器**: [pnpm](https://pnpm.io/)
-
 ## 🤝 贡献指南
 
 欢迎提交 Issue 和 Pull Request！
@@ -89,13 +66,6 @@ docs/
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 开启一个 Pull Request
 
-### 文档规范
-
-- 使用 Markdown 格式编写文档
-- 保持文档结构清晰，层次分明
-- 代码示例应当完整且可运行
-- 及时更新文档以匹配项目最新版本
-
 ## 🔗 相关链接
 
 - [鹊桥主项目](https://github.com/17TheWord/QueQiao)
@@ -103,13 +73,13 @@ docs/
 - [CurseForge 下载](https://www.curseforge.com/minecraft/mc-mods/queqiao)
 - [Discord 社群](https://discord.gg/SBUkMYsyf2)
 
-## 📄 开源协议
-
-本项目采用 MIT 协议开源 - 查看 [LICENSE](LICENSE) 文件了解更多信息。
-
 ## 💬 联系方式
 
 如有问题或建议，欢迎通过以下方式联系：
 
 - 提交 [Issue](https://github.com/17TheWord/queqiao-docs/issues)
 - 加入 [Discord 社群](https://discord.gg/SBUkMYsyf2)
+
+## 📄 开源协议
+
+本项目采用 [MIT](./LICENSE) 协议开源
