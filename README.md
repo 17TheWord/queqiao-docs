@@ -27,38 +27,38 @@
 
 1. **克隆仓库**
 
-```bash
-git clone https://github.com/17TheWord/queqiao-docs.git
-cd queqiao-docs
-```
+    ```bash
+    git clone https://github.com/17TheWord/queqiao-docs.git
+    cd queqiao-docs
+    ```
 
 2. **安装依赖**
 
-本项目使用 pnpm 作为包管理器：
+   - 本项目使用 pnpm 作为包管理器：
 
-```bash
-pnpm install
-```
+    ```bash
+    pnpm install
+    ```
 
 3. **启动开发服务器**
 
-```bash
-pnpm docs:dev
-```
+   - 文档将在 `http://localhost:8080` 上运行。
 
-文档将在 `http://localhost:8080` 上运行。
+   ```bash
+   pnpm docs:dev
+   ```
 
 4. **构建生产版本**
 
-```bash
-pnpm docs:build
-```
+    ```bash
+    pnpm docs:build
+    ```
 
-构建后的文件将输出到 `docs/.vuepress/dist` 目录。
+    - 构建后的文件将输出到 `docs/.vuepress/dist` 目录。
 
 ## 📚 文档结构
 
-```
+```text
 docs/
 ├── README.md              # 首页
 ├── introduction/          # 项目介绍
