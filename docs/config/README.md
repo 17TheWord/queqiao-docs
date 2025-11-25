@@ -1,7 +1,5 @@
 # 配置
 
-本页面介绍鹊桥的主要配置项。
-
 ```yaml
 enable: true # 是否启用插件/模组
 
@@ -14,6 +12,8 @@ access_token: "" # 用于连接时进行验证
 # 消息前缀
 # 消息前面添加的前缀（不包含Title、ActionBar）
 # 设置为空时，不会在消息前面添加前缀
+# 支持符合MC消息组件的自定义 Json 前缀，例如他 "{\"text\": \"[鹊桥]\", \"color\": \"green\", \"bold\": true}"
+# 默认风格为 yellow
 message_prefix: "[鹊桥]"
 
 # WebSocket Server配置项

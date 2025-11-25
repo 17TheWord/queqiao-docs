@@ -1,3 +1,20 @@
 # 独立程序额外配置
 
-🚧 本页面正在施工，敬请期待后续内容更新。
+```yaml
+log_path: ".\\logs\\latest.log"
+
+# 以下正则均为原版示例
+
+chat_regex:
+  - regex: "(.*)]:(.*)<(.*)> (.*)"
+    player_group: 3
+    message_group: 4
+
+join_regex:
+  - regex: "Server thread/INFO]: (.*) joined the game"
+    player_group: 1
+
+quit_regex:
+  - regex: "Server thread/INFO]: (.*) left the game"
+    player_group: 1
+```
