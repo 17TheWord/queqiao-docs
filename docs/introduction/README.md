@@ -3,7 +3,7 @@
 
 ✨ Minecraft 服务端 Mod/Plugin，实时接收玩家事件、API 广播消息 ✨
 
-[GitHub 仓库](https://github.com/17TheWord/QueQiao) ｜ [Wiki 文档](https://github.com/17TheWord/QueQiao/wiki) ｜ [Modrinth 下载](https://modrinth.com/plugin/queqiao) ｜ [CurseForge 下载](https://www.curseforge.com/minecraft/mc-mods/queqiao)
+[GitHub 仓库](https://github.com/17TheWord/QueQiao) ｜ [Modrinth 下载](https://modrinth.com/plugin/queqiao) ｜ [CurseForge 下载](https://www.curseforge.com/minecraft/mc-mods/queqiao)
 
 ## 项目简介
 

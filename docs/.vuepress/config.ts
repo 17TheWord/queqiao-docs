@@ -25,9 +25,10 @@ export default defineUserConfig({
         repo: 'https://github.com/17TheWord/queqiao-docs',
         navbar: [
             { text: '首页', link: '/' },
-            { text: '简介', link: '/introduction/' },
-            { text: '开始', link: '/start/' },
-            { text: '配置', link: '/config/' },
+            { text: '介绍', link: '/introduction/' },
+            { text: '部署', link: '/start/' },
+            { text: '配置文件', link: '/config/' },
+            { text: '命令', link: '/commands.md' },
             {
                 text: '事件',
                 children: [
@@ -42,13 +43,28 @@ export default defineUserConfig({
                     { text: 'V1 API', link: '/api/v1/' },
                 ],
             },
+            {
+                text: '常见问题',
+                link: '/faq.md',
+            },
+            {
+                text: '开发',
+                children: [
+                    { text: '新增版本支持', link: '/development/contributing/' },
+                    { text: '新增对接端', link: '/development/integration/' },
+                ]
+            },
         ],
         sidebar: {
             "/introduction/": "heading",
             "/start/": [
                 {
-                    text: '快速开始',
+                    text: 'Plugin & Mod',
                     link: '/start/',
+                },
+                {
+                    text: '独立程序',
+                    link: '/start/vanilla.md',
                 },
                 {
                     text: '详细步骤',
