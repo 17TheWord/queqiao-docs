@@ -1,7 +1,5 @@
 # PlayerCommandEvent
 
-- `Velocity` 无该事件
-
 | 字段名         | 数据类型 | 可能的值        | 说明         |
 | :------------- | :------- | :-------------- | :----------- |
 | `timestamp`    | `int`    | -               | 事件时间戳   |
@@ -15,3 +13,7 @@
 | `raw_message`  | `str`    | -               | 原始消息内容 |
 | `player`       | [`Player`](../model/player.md#player) | -               | 玩家对象     |
 | `command`      | `str`    | -               | 玩家输入的命令内容 |
+
+## 服务端支持情况
+
+- 不支持 `原版端`、`Velocity`
