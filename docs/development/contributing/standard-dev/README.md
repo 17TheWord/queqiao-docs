@@ -14,6 +14,17 @@
 - [ModMultiVersion-0.18.6](https://plugins.jetbrains.com/plugin/24872-modmultiversion/versions/stable/680615) 及以上：推荐 `v0.18.6` 版本，新版 Bug 详见 [Issue](https://github.com/kitUIN/ModMultiVersion/issues/4)
 - JDK 21 及以上
 
+## 配置 GitHub Maven Packages
+
+- 各服务端插件/模组的共用部分已被移至 [鹊桥工具包](https://github.com/17TheWord/QueQiaoTool)，
+    并由 GitHub 进行托管。
+- 访问 GitHub Maven Packages 需要配置**只读的个人访问令牌**。
+- 参考
+    [GitHub Packages 文档](https://docs.github.com/zh/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#%E5%90%91-github-packages-%E9%AA%8C%E8%AF%81)。
+- 该项目使用的环境变量名。
+  - `GH_USERNAME`：GitHub 用户名。
+  - `PACKAGE_READ_ONLY_TOKEN`：GitHub 个人访问令牌。
+
 ## 准备
 
 1. 克隆项目源码至本地并通过 IDEA 打开。
