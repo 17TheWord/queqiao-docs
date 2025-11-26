@@ -31,4 +31,8 @@ export default [
             { text: '快速开发', link: '/development/quick-start/' },
         ]
     },
+    {
+        text: '对接',
+        link: '/integration/',
+    }
 ] as NavbarOptions
