@@ -14,6 +14,10 @@
 | `player`       | [`Player`](../model/player.md#player) | -               | 玩家对象     |
 | `command`      | `str`    | -               | 玩家输入的命令内容 |
 
+::: tip
+可以对命令消息进行监听和处理，搭配 `Rcon` 实现模组服中无权限管理插件的简单TP命令功能。
+:::
+
 ## 服务端支持情况
 
 - 不支持 `原版端`、`Velocity`

@@ -20,6 +20,17 @@
 | `display`  | [`Display`](#display) | -            | 成就显示信息 |
 | `text`  | `str` | -            | 成就事件的文本 |
 
+::: tip
+可通过以下方式拼接成就获得消息
+
+```python
+achievement_message = f"[{event.server_name}] {event.achievement.text}"
+
+[Server] 玩家A has earned the achievement [Getting Wood]
+```
+
+:::
+
 ## Display
 
 | **字段名**    | **数据类型** | **可能的值** | **说明**     |

@@ -13,3 +13,14 @@
 | `raw_message`  | `str`    | -               | 原始消息内容 |
 | `player`       | [`Player`](../model/player.md#player) | -               | 玩家对象     |
 | `message`      | `str`    | -               | 消息对象     |
+
+::: tip
+可通过以下方式拼接成聊天消息
+
+```python
+chat_message = f"[{event.server_name}] {event.player.nickname}：{event.message}"
+
+[Server] 玩家A：你好！
+```
+
+:::
