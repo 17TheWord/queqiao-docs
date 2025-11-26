@@ -9,7 +9,7 @@
 | `server_version`| `str`   | -               | 服务器版本   |
 | `server_type`  | `str`    | -               | 服务器类型   |
 | `sub_type`     | `str`    | `player_death`  | 事件子类型   |
-| `player`       | [[`Player`](../model/player.md#player)](../model/player.md#player) | -               | 玩家对象     |
+| `player`       | [`Player`](../model/player.md#player) | -               | 玩家对象     |
 | `death`        | [`Death`](#death) | -         | 死亡详情     |
 
 ## Death
@@ -19,6 +19,17 @@
 | `key`       | `str`      | -        | 用于翻译的 Key |
 | `args`      | `list[str]`| -        | 翻译参数列表   |
 | `text`      | `str`      | -        | 死亡消息内容   |
+
+::: tip
+可通过以下方式拼接成玩家死亡消息
+
+```python
+death_message = f"[{event.server_name}] {event.death.text}"
+
+[Server] 玩家A was slain by Zombie
+```
+
+:::
 
 ## 服务端支持情况
 
