@@ -1,5 +1,11 @@
 # 配置
 
+::: tip
+
+- 插件端配置文件位于 `./plugin/QueQiao/config.yml`。
+- 模组端配置文件位于 `./config/QueQiao/config.yml`。
+:::
+
 ```yaml
 enable: true # 是否启用插件/模组
 

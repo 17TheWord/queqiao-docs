@@ -1,5 +1,10 @@
 # 独立程序额外配置
 
+::: tip
+
+- 配置文件位于 `./config/QueQiao/regex.yml`。
+:::
+
 ```yaml
 log_path: ".\\logs\\latest.log"
 
