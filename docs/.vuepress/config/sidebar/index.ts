@@ -18,6 +18,6 @@ export default {
     "/api/v2/": apiV2Sidebar,
     "/api/v1/": apiV1Sidebar,
     '/faq': 'heading',
-    '/development/contributing/standard-dev/': standardDevSidebar,
-    '/development/contributing/quick-start/': quickStartSidebar,
+    '/development/standard-dev/': standardDevSidebar,
+    '/development/quick-start/': quickStartSidebar,
 } as SidebarOptions

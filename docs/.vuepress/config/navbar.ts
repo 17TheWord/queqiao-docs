@@ -27,8 +27,8 @@ export default [
     {
         text: '开发',
         children: [
-            { text: '标准开发', link: '/development/contributing/standard-dev/' },
-            { text: '快速开发', link: '/development/contributing/quick-start/' },
+            { text: '标准开发', link: '/development/standard-dev/' },
+            { text: '快速开发', link: '/development/quick-start/' },
         ]
     },
 ] as NavbarOptions
