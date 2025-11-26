@@ -11,7 +11,7 @@
     ```
 
 3. 启动服务器，等待开启 `Websocket Server`
-4. 使用 [`ApiFox`](https://apifox.com/) 或其他API测试工具，或连接 [对接项目](../introduction/README.md#对接)
+4. 使用 ApiFox 或其他API测试工具，或连接 [对接项目](../introduction/#对接)
     - 配置全局 `Request Header`
 
     ```json5

@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![VuePress](https://img.shields.io/badge/VuePress-2.0-green.svg)](https://v2.vuepress.vuejs.org/)
 
-本仓库是 [鹊桥 (QueQiao)](https://github.com/17TheWord/QueQiao) 项目的官方文档站点。
+本仓库是 [鹊桥 (QueQiao)](https://github.com/17TheWord/QueQiao) 项目的文档仓库，旨在为用户提供详细的使用指南和参考资料。
 
 ## 📖 关于鹊桥
 
@@ -21,7 +21,7 @@
 
 ### 在线阅读
 
-访问文档站点：[https://17theword.github.io/queqiao-docs/](https://17theword.github.io/queqiao-docs/)（请根据实际部署地址修改）
+访问文档站点：[https://queqiao-docs.pages.dev/](https://queqiao-docs.pages.dev/)
 
 ### 本地运行
 
