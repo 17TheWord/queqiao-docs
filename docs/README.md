@@ -10,7 +10,7 @@ actions:
     type: secondary
 
   - text: 快速上手
-    link: /start/
+    link: /deploy/
     type: primary
 
 features:
