@@ -28,3 +28,4 @@ chat_message = f"[{event.server_name}] {event.player.nickname}：{event.message}
 - `raw_message` 字段
   - 在 `vanilla (原版)` 与 `Spigot` 中，均与 `message` 字段相同。
   - 在其他服务端中，为玩家聊天消息的 `Json` 文本组件格式字符串，但如果消息没有使用任何格式化，则与 `message` 字段相同。
+  - 例如：玩家发送消息 `Hello`，则 `raw_message` 字段为 `Hello`；玩家发送消息 `&dHello`，则 `raw_message` 字段可能为 `{"text":"Hello","color":"light_purple"}`（暂未测试）。
