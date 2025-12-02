@@ -9,7 +9,7 @@ actions:
     link: https://github.com/17TheWord/QueQiao
     type: secondary
 
-  - text: 快速上手
+  - text: 快速开始
     link: /deploy/
     type: primary
 

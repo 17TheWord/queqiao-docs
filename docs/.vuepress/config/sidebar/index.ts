@@ -7,6 +7,7 @@ import deploySidebar from './deploy'
 import configSidebar from './config'
 import standardDevSidebar from './development/standard-dev'
 import quickStartSidebar from './development/quick-start'
+import integrationSidebar from './integration'
 
 export default {
     "/introduction": "heading",
@@ -20,4 +21,5 @@ export default {
     '/faq': 'heading',
     '/development/standard-dev/': standardDevSidebar,
     '/development/quick-start/': quickStartSidebar,
+    '/integration/': integrationSidebar,
 } as SidebarOptions
