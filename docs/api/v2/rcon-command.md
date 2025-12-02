@@ -33,6 +33,7 @@
 ```json
 {
     "code": 200,
+    "api": "send_rcon_command",
     "post_type": "response",
     "status": "SUCCESS",
     "message": "success",

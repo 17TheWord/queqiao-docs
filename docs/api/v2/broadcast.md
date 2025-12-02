@@ -52,6 +52,7 @@
 ```json
 {
     "code": 200,
+    "api": "broadcast",
     "post_type": "response",
     "status": "SUCCESS",
     "message": "success",
