@@ -55,6 +55,7 @@
 ```json
 {
     "code": 200,
+    "api": "send_private_msg",
     "post_type": "response",
     "status": "SUCCESS",
     "message": "success",

@@ -38,6 +38,7 @@
 ```json
 {
     "code": 200,
+    "api": "send_actionbar",
     "post_type": "response",
     "status": "SUCCESS",
     "message": "success",
