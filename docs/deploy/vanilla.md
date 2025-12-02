@@ -9,7 +9,7 @@
 2. 前往 [Releases](https://github.com/17TheWord/QueQiao/releases) 页面下载日志读取程序，丢到服务端核心目录，编写 `.sh` 或 `.bat` 脚本，执行独立程序。
 
     ```shell
-    java -Xms256M -Xmx512M -jar QueQiao-minecraft+origin-x.x.x.jar
+    java -Xms256M -Xmx512M -jar QueQiao-minecraft+vanilla-x.x.x.jar
     ```
 
 3. 配置文件将生成至 `./config/QueQiao/config.yml`，内容 [示例参考](../config/vanilla.md)。
