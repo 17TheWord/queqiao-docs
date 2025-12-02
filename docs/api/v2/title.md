@@ -16,7 +16,7 @@
 | `stay` | `integer` | `70` | 标题停留时间，单位 `ticks`。 |
 | `fade_out` | `integer` | `20` | 标题淡出时间，单位 `ticks`。 |
 
-> - `TItle` 与 `SubTitle` 至少传递一个
+> - `Title` 与 `SubTitle` 至少传递一个
 
 ---
 
