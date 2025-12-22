@@ -52,6 +52,8 @@
 
 ### 🔹 返回信息
 
+- 正常发送
+
 ```json
 {
     "code": 200,
@@ -80,3 +82,23 @@
     "echo": "1"
 }
 ```
+
+---
+
+- `uuid`/`nickname` 均为空
+
+```json
+{
+    "code": 400,
+    "api": "send_private_msg",
+    "post_type": "response",
+    "status": "FAILED",
+    "message": "success",
+    "data": null,
+    "echo": "1"
+}
+```
+
+---
+
+- 待补充……
