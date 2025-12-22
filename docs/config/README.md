@@ -13,7 +13,7 @@ debug: false # DEBUG，开启后会打印所有日志
 
 server_name: "Server" # 服务器名称，当有多个服务器时，请使用不同的命名
 
-access_token: "" # 用于连接时进行验证
+access_token: "" # 用于连接时进行验证，无需填写 Bearer 前缀，留空则不进行验证
 
 # 消息前缀
 # 消息前面添加的前缀（不包含Title、ActionBar）
