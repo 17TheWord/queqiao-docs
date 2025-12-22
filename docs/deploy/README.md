@@ -20,7 +20,7 @@
       // 服务器名称，必须与 config.yml 中的 'server_name' 一致。
       "x-self-name": "TestServer",
       // 选填
-      // 鉴权，必须与 config.yml 中的 'access_token' 一致,如果 config.yml 中的 'auth_token' 为空，则可不设置此项。
+      // 鉴权，Bearer 后的内容必须与 config.yml 中的 'access_token' 一致,如果 config.yml 中的 'auth_token' 为空，则可不设置此项。
       "Authorization": "Bearer 123",
       // 选填（建议填写）
       // 用于标记对接项目来源，例如鹊桥中该项为 "minecraft"，nonebot 适配器中该项为 "nonebot"，如果填写该项，应该拒绝相同来源的重复连接。
