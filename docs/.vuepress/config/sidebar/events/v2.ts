@@ -23,6 +23,7 @@ export default [
         text: '其他模型',
         children: [
             { text: 'Player', link: '/events/v2/model/player.md' },
+            { text: 'Translate', link: '/events/v2/model/translate.md' },
         ],
     },
 ]

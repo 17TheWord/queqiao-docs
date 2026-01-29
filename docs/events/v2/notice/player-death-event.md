@@ -10,7 +10,7 @@
 | `server_type`  | `str`    | -               | 服务器类型   |
 | `sub_type`     | `str`    | `player_death`  | 事件子类型   |
 | `player`       | [`Player`](../model/player.md#player) | -               | 玩家对象     |
-| `death`        | [`Death`](#death) | -         | 死亡详情     |
+| `death`        | [`Death`](#death) / [`Translate`](../model/translate.md) | -            | 死亡详情 (`0.4.1+` 采用 [`Translate`](../model/translate.md)) |
 
 ## Death
 
