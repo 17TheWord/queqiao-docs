@@ -51,17 +51,72 @@ enable_translation: true
 }
 ```
 
-## 翻译示例
+## 示例
+
+## 成就翻译
 
 ```json
 {
-  "key": "death.attack.player.item",
-  "args": [
-    { "key": null, "args": null, "text": "17TheWord" },
-    { "key": null, "args": null, "text": "Zombie" },
-    { "key": "item.minecraft.diamond_sword", "args": null, "text": "Diamond Sword" }
-  ],
-  "text": "17TheWord was slain by Zombie using Diamond Sword"
+    "achievement": {
+        "key": "minecraft:story/iron_tools",
+        "display": {
+            "title": {
+                "key": "advancements.story.iron_tools.title",
+                "args": [],
+                "text": "这不是铁镐么"
+            },
+            "description": {
+                "key": "advancements.story.iron_tools.description",
+                "args": [],
+                "text": "升级你的镐"
+            },
+            "frame": "task"
+        },
+        "translation": {
+            "key": "chat.type.advancement.task",
+            "args": [
+                {
+                    "key": null,
+                    "args": null,
+                    "text": "17TheWord"
+                },
+                {
+                    "key": "chat.square_brackets",
+                    "args": [
+                        {
+                            "key": "advancements.story.iron_tools.title",
+                            "args": [],
+                            "text": "[这不是铁镐么]"
+                        }
+                    ],
+                    "text": "[这不是铁镐么]"
+                }
+            ],
+            "text": "17TheWord取得了进度[这不是铁镐么]"
+        }
+    },
+    // ...
+    "server_type": "forge"
+}
+```
+
+### 死亡事件示例
+
+```json
+{
+    "death": {
+        "key": "death.attack.genericKill",
+        "args": [
+            {
+                "key": null,
+                "args": null,
+                "text": "17TheWord"
+            }
+        ],
+        "text": "17TheWord被杀死了"
+    },
+    // ...
+    "server_type": "forge"
 }
 ```
 
