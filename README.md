@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![VuePress](https://img.shields.io/badge/VuePress-2.0-green.svg)](https://v2.vuepress.vuejs.org/)
 
-本仓库是 [鹊桥 (QueQiao)](https://github.com/17TheWord/QueQiao) 项目的文档仓库，旨在为用户提供详细的使用指南和参考资料。
+本仓库是 [鹊桥 (QueQiao)](https://github.com/17TheWord/QueQiao) 项目的文档仓库，基于 [VuePress 2.0](https://vuepress.vuejs.org/zh/) 构建。
 
 ## 📖 关于鹊桥
 
@@ -34,7 +34,8 @@
 
 2. **安装依赖**
 
-   - 本项目使用 pnpm 作为包管理器：
+  > 需要 Node.js 版本 20.19+, 22.12+ 或 23+
+  - 本项目使用 pnpm 作为包管理器：
 
   ```bash
   pnpm install
