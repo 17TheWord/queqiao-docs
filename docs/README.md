@@ -1,6 +1,6 @@
 ---
 home: true
-heroText: 鹊桥
+heroText: 鹊桥 - 不止跨平台消息转发
 heroImage: /logo.png
 tagline: Minecraft 服务端 Mod/Plugin，实时接收玩家事件、API广播消息
 
