@@ -27,34 +27,36 @@
 
 1. **克隆仓库**
 
-  ```bash
-  git clone https://github.com/17TheWord/queqiao-docs.git
-  cd queqiao-docs
-  ```
+```bash
+git clone https://github.com/17TheWord/queqiao-docs.git
+cd queqiao-docs
+```
 
 2. **安装依赖**
 
-  > 需要 Node.js 版本 20.19+, 22.12+ 或 23+
-  - 本项目使用 pnpm 作为包管理器：
+> 需要 Node.js 版本 20.19+, 22.12+ 或 23+
 
-  ```bash
-  pnpm install
-  ```
+本项目使用 pnpm 作为包管理器：
+
+```bash
+pnpm install
+```
 
 3. **启动开发服务器**
 
-  - 文档将在 `http://localhost:8080` 上运行。
-  ```bash
-  pnpm docs:dev
-  ```
+文档将在 `http://localhost:8080` 上运行。
+
+```bash
+pnpm docs:dev
+```
 
 4. **构建生产版本**
 
-  ```bash
-  pnpm docs:build
-  ```
+```bash
+pnpm docs:build
+```
 
-  - 构建后的文件将输出到 `docs/.vuepress/dist` 目录。
+构建后的文件将输出到 `docs/.vuepress/dist` 目录。
 
 ## 🤝 贡献指南
 
