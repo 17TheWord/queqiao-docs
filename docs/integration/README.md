@@ -16,6 +16,7 @@
 - [`@KroMiose/nekro-agent`](https://github.com/KroMiose/nekro-agent)：更智能、更优雅的代理执行 `AI`
 - [`@erzaozi/queqiao-node-sdk`](https://github.com/erzaozi/queqiao-node-sdk)：鹊桥对接端的 `Node.js` SDK 实现。
 - [`A0000Xz/MaiBot-MineMai-Plugin`](https://github.com/A0000Xz/MaiBot-MineMai-Plugin)：`mcqq` 的 `MaiBot` 插件实现。
+- [`@sssysy/MinecraftQueqiao`](https://github.com/sssysy/MinecraftQueqiao)：`mcqq` 的 `GsCore` 插件实现。
 
 ## 相关项目
 
