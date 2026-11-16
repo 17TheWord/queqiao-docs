@@ -17,6 +17,17 @@
 - **权限管理**：提供权限节点，支持权限插件进行管理。
 - **命令交互**：通过 Rcon 实现服务端命令下发与反馈。
 
+## 直连版本
+
+鹊桥通过 `WebSocket` 把事件与消息交给外部对接端（例如 `NoneBot2`）。
+如果你只想把 `QQ` 接进来、不想额外部署对接端，可以使用同作者的直连版本 [`mcqq`](https://github.com/17TheWord/mcqq)：
+
+- 通过 `QQ` 官方机器人 `API v2` 直连，安装后配置 `AppID` / `AppSecret` 即可使用。
+- 支持 `Fabric`、`NeoForge`、`Forge`、`Paper`、`Spigot` 等平台。
+- 支持 `QQ` → `Minecraft` 消息、群成员变动提示、`Minecraft` → `QQ` 事件转发以及 `RCON` 命令执行。
+
+`mcqq` 与鹊桥相互独立，按需选择其一即可。
+
 ## 兼容
 
 - [`@kitUIN/ChatImage`](https://github.com/kitUIN/ChatImage)：在 `Minecraft` 聊天栏中显示图片
