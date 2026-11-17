@@ -1,49 +1,68 @@
-# 命令返回消息实现
+# 命令执行上下文
 
-- 本章节介绍如何实现命令返回信息处理器。
-- 在鹊桥中，为了减少重复代码，将命令返回信息的处理逻辑抽象为 `HandleCommandReturnMessageService` 抽象类。
-- 开发者可以通过继承该类并实现其中的方法，来减少每次命令开发时对返回信息处理的重复编写。
-- 该处理器主要包含两个方法：
-  - `handleCommandReturnMessage(Object object, String message)`：用于处理命令返回信息的发送。
-  - `hasPermission(Object object, String node)`：用于判断命令发送者是否具有执行命令的权限。
-  - 其中，`object` 参数通常是**命令发送者**类型的对象，代表命令的发送者。
+::: tip 版本提示
+适用于 **QueQiao Core 0.7.0-beta.4** 及以上版本。旧版的 `HandleCommandReturnMessageService` 已被移除。
+:::
+
+命令执行上下文用于把“命令回执”和“权限判断”从 core 解耦到平台侧。
+
+## CommandExecutionContext
+
+继承 `CommandExecutionContext<NCS>`，实现两个方法：
+
+| 方法 | 说明 |
+| --- | --- |
+| `reply(String message)` | 把文本回执发送给命令发送者 |
+| `hasPermission(String permission)` | 判断发送者是否有权限 |
+
+- `NCS` 是平台命令源类型（如 Bukkit `CommandSender`、Forge `ICommandSender`、Velocity `CommandSource`）。
+- `nativeSource` 可以通过父类直接访问。
 
 ## 参考
 
 ::: details 点击展开
 
 ```java
-package com.github.theword.queqiao.handle;
+package com.github.theword.queqiao.command;
 
-import com.github.theword.queqiao.tool.constant.BaseConstant;
-import com.github.theword.queqiao.tool.handle.HandleCommandReturnMessageService;
+import io.github.theword.queqiao.core.command.CommandExecutionContext;
+import io.github.theword.queqiao.core.constant.BaseConstant;
+import io.github.theword.queqiao.core.constant.CommandConstant;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.TextComponentString;
 
-public class HandleCommandReturnMessageImpl extends HandleCommandReturnMessageService {
+/**
+ * 一次命令调用的执行上下文（Forge 1.12.2 版）。
+ */
+public final class ForgeCommandContext extends CommandExecutionContext<ICommandSender> {
 
-    @Override
-    public void handleCommandReturnMessage(Object object, String message) {
-        ICommandSender sender = (ICommandSender) object;
-        sender.sendMessage(new TextComponentString(message));
+    public ForgeCommandContext(ICommandSender nativeSource) {
+        super(nativeSource);
     }
 
-    /**
-     * 判断发送者是否有权执行命令
-     * <p>MOD端中无权限节点，权限等级为2</p>
-     *
-     * @param object 命令返回者
-     * @param node   权限节点
-     * @return boolean 是否有权限
-     */
     @Override
-    public boolean hasPermission(Object object, String node) {
-        ICommandSender sender = (ICommandSender) object;
-        if (sender.canUseCommand(BaseConstant.MOD_PERMISSION_LEVEL,"")) return true;
-        handleCommandReturnMessage(object, "您没有权限执行此命令");
-        return false;
+    public void reply(String message) {
+        nativeSource.sendMessage(new TextComponentString(message));
+    }
+
+    @Override
+    public boolean hasPermission(String permission) {
+        // MOD 端无权限节点，统一按权限等级判定
+        return nativeSource.canUseCommand(CommandConstant.MOD_PERMISSION_LEVEL, BaseConstant.COMMAND_HEADER);
     }
 }
 ```
 
+:::
+
+## 使用方式
+
+命令执行时把它传给 `CommandRouter`，详见 [命令](../commands.md)：
+
+```java
+router.execute(new ForgeCommandContext(sender), args);
+```
+
+::: tip
+命令执行上下文只在命令真正执行时创建，因此可以安全地读取运行时状态。
 :::

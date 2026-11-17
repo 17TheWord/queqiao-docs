@@ -1,30 +1,55 @@
 # 工具包示例
 
+::: tip 版本提示
+适用于 **QueQiao Core 0.7.0-beta.4** 及以上版本。
+:::
+
+工具类负责把平台对象转换成 core 模型：
+
+- 玩家对象 → `PlayerModel`
+- 成就对象 → `AchievementModel`
+- JSON → 平台消息组件（`buildComponent`）
+
+翻译组件的解析已统一放到 `PlatformContext#parseTranslateModel`，工具类不再自行调用 `GlobalContext.translate`。
+
+## 参考
+
+::: details 点击展开
+
 ```java
 package com.github.theword.queqiao.utils;
 
-import com.github.theword.queqiao.tool.event.model.PlayerModel;
-import com.github.theword.queqiao.tool.event.model.achievement.AchievementModel;
-import com.github.theword.queqiao.tool.event.model.achievement.DisplayModel;
+import com.github.theword.queqiao.PlatformContext;
+import com.google.gson.JsonElement;
+import io.github.theword.queqiao.core.event.model.PlayerModel;
+import io.github.theword.queqiao.core.event.model.achievement.AchievementModel;
+import io.github.theword.queqiao.core.event.model.achievement.DisplayModel;
 import net.minecraft.advancements.Advancement;
-
 import net.minecraft.advancements.DisplayInfo;
+
 // IF > forge-1.16.5
-import net.minecraft.server.level.ServerPlayer;
+//import net.minecraft.network.chat.Component;
+//import net.minecraft.network.chat.MutableComponent;
+//import net.minecraft.server.level.ServerPlayer;
 // ELSE
-//import net.minecraft.util.text.TranslationTextComponent;
 //import net.minecraft.entity.player.ServerPlayerEntity;
+//import net.minecraft.util.text.IFormattableTextComponent;
+//import net.minecraft.util.text.ITextComponent;
+//import net.minecraft.util.text.TranslationTextComponent;
 // END IF
 
 // IF forge-1.18.2
 //import net.minecraft.network.chat.TranslatableComponent;
-// ELSE IF >= forge-1.19
-import net.minecraft.network.chat.contents.TranslatableContents;
+// END IF
+
+// IF >= forge-1.21
+//import static com.github.theword.queqiao.QueQiao.minecraftServer;
 // END IF
 
 public class ForgeTool {
+
     // IF > forge-1.16.5
-    public static PlayerModel getForgePlayer(ServerPlayer forgeServerPlayer) {
+//    public static PlayerModel getForgePlayer(ServerPlayer forgeServerPlayer) {
         // ELSE
 //    public static PlayerModel getForgePlayer(ServerPlayerEntity forgeServerPlayer) {
         // END IF
@@ -45,44 +70,86 @@ public class ForgeTool {
         return playerModel;
     }
 
-    public static AchievementModel getForgeAchievement(Advancement advancement) {
-        AchievementModel achievementModel = new AchievementModel();
-        DisplayModel displayModel = new DisplayModel();
+    /**
+     * 构造成就模型；成就未配置公告或无法解析时返回 null
+     */
+    public static AchievementModel getForgeAchievement(PlatformContext context, String nickname, Advancement advancement) {
         // IF >= forge-1.21
-        if (advancement.display().isEmpty()) {
-            return achievementModel;
-        }
-        if (advancement.parent().isPresent()) {
-            achievementModel.setKey(advancement.parent().get().toString());
-        }
-        DisplayInfo displayInfo = advancement.display().get();
+//        if (advancement.display().isEmpty() || !advancement.display().get().shouldAnnounceChat() || advancement.name().isEmpty()) {
+//            return null;
+//        }
+//        DisplayInfo displayInfo = advancement.display().get();
         // ELSE
-//        achievementModel.setKey(advancement.getId().toString());
-//        if (advancement.getDisplay() == null) {
-//            return achievementModel;
+//        if (advancement.getDisplay() == null || !advancement.getDisplay().shouldAnnounceChat()) {
+//            return null;
 //        }
 //        DisplayInfo displayInfo = advancement.getDisplay();
         // END IF
 
+        AchievementModel achievementModel = new AchievementModel();
         // IF >= forge-1.21
-        displayModel.setFrame(displayInfo.getType().toString());
+//        if (advancement.parent().isPresent()) {
+//            achievementModel.setKey(advancement.parent().get().toString());
+//        }
+        // ELSE
+//        achievementModel.setKey(advancement.getId().toString());
+        // END IF
+
+        DisplayModel displayModel = new DisplayModel();
+        // IF >= forge-1.21
+//        displayModel.setFrame(displayInfo.getType().toString());
         // ELSE
 //        displayModel.setFrame(displayInfo.getFrame().toString());
         // END IF
 
-        // IF forge-1.16.5
-//        displayModel.setTitle(((TranslationTextComponent) displayInfo.getTitle()).getKey());
-//        displayModel.setDescription(((TranslationTextComponent) displayInfo.getDescription()).getKey());
-        // ELSE IF forge-1.18.2
-//        displayModel.setTitle(((TranslatableComponent) displayInfo.getTitle()).getKey());
-//        displayModel.setDescription(((TranslatableComponent) displayInfo.getDescription()).getKey());
-        // ELSE
-        displayModel.setTitle(((TranslatableContents) displayInfo.getTitle().getContents()).getKey());
-        displayModel.setDescription(((TranslatableContents) displayInfo.getDescription().getContents()).getKey());
-        // END IF
-
+        displayModel.setTitle(context.parseTranslateModel(displayInfo.getTitle()));
+        displayModel.setDescription(context.parseTranslateModel(displayInfo.getDescription()));
         achievementModel.setDisplay(displayModel);
+
+        // IF >= forge-1.21
+//        MutableComponent translatable = Component.translatable(
+//                achievementModel.getTranslationKey(displayModel.getFrame()),
+//                Component.literal(nickname),
+//                advancement.name().get()
+//        );
+        // ELSE IF >= forge-1.19
+//        MutableComponent translatable = Component.translatable(
+//                achievementModel.getTranslationKey(displayModel.getFrame()),
+//                Component.literal(nickname),
+//                advancement.getChatComponent()
+//        );
+        // ELSE IF forge-1.18.2
+//        TranslatableComponent translatable = new TranslatableComponent(
+//                achievementModel.getTranslationKey(displayModel.getFrame()),
+//                new TranslatableComponent(nickname),
+//                advancement.getDisplay().getTitle()
+//        );
+        // ELSE
+//        TranslationTextComponent translatable = new TranslationTextComponent(
+//                achievementModel.getTranslationKey(displayModel.getFrame()),
+//                new TranslationTextComponent(nickname),
+//                advancement.getDisplay().getTitle()
+//        );
+        // END IF
+        achievementModel.setTranslation(context.parseTranslateModel(translatable));
+
         return achievementModel;
     }
+
+    // IF >= forge-1.21
+//    public static MutableComponent buildComponent(JsonElement jsonElement) {
+//        return Component.Serializer.fromJson(jsonElement, minecraftServer.registryAccess());
+//    }
+    // ELSE IF >= forge-1.18
+//    public static MutableComponent buildComponent(JsonElement jsonElement) {
+//        return Component.Serializer.fromJson(jsonElement);
+//    }
+    // ELSE
+//    public static IFormattableTextComponent buildComponent(JsonElement jsonElement) {
+//        return ITextComponent.Serializer.fromJson(jsonElement);
+//    }
+    // END IF
 }
 ```
+
+:::

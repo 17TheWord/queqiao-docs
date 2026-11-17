@@ -1,6 +1,15 @@
-# 工具包
+# 工具类
 
-工具包用来封装一些复用性较高的代码，方便在事件处理器、命令等模块中调用。
+::: tip 版本提示
+适用于 **QueQiao Core 0.7.0-beta.4** 及以上版本。
+:::
+
+工具类用于封装平台侧的重复代码，主要包含：
+
+- 玩家对象 → `PlayerModel`
+- 成就对象 → `AchievementModel`
+- JSON → 平台消息组件
+- 翻译组件的解析已统一放到 `PlatformContext#parseTranslateModel`，工具类不再自行解析
 
 ## 参考
 
@@ -9,26 +18,21 @@
 ```java
 package com.github.theword.queqiao.utils;
 
-import com.github.theword.queqiao.tool.GlobalContext;
-import com.github.theword.queqiao.tool.event.model.PlayerModel;
-import com.github.theword.queqiao.tool.event.model.achievement.AchievementModel;
-import com.github.theword.queqiao.tool.event.model.achievement.DisplayModel;
+import com.github.theword.queqiao.PlatformContext;
 import com.google.gson.JsonElement;
+import io.github.theword.queqiao.core.event.model.PlayerModel;
+import io.github.theword.queqiao.core.event.model.achievement.AchievementModel;
+import io.github.theword.queqiao.core.event.model.achievement.DisplayModel;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 
 public class ForgeTool {
 
-    /**
-     * 将Forge的玩家对象转换为通用玩家模型
-     * 
-     * @param forgeServerPlayer Forge服务器玩家对象
-     * @return 通用玩家模型
-     */
     public static PlayerModel getForgePlayer(EntityPlayerMP forgeServerPlayer) {
         PlayerModel playerModel = new PlayerModel();
         playerModel.setNickname(forgeServerPlayer.getName());
@@ -48,36 +52,39 @@ public class ForgeTool {
     }
 
     /**
-     * 将Forge的成就对象转换为通用成就模型
-     * 
-     * @param advancement Forge成就对象
-     * @return 通用成就模型
+     * 构造成就模型；标题/描述需要交给 PlatformContext 解析翻译组件。
      */
-    public static AchievementModel getForgeAchievement(Advancement advancement) {
+    public static AchievementModel getForgeAchievement(PlatformContext context, String nickname, Advancement advancement) {
         AchievementModel achievementModel = new AchievementModel();
         DisplayModel displayModel = new DisplayModel();
+        if (advancement.getDisplay() == null) {
+            return achievementModel;
+        }
+
         achievementModel.setKey(advancement.getId().toString());
         DisplayInfo displayInfo = advancement.getDisplay();
         displayModel.setFrame(displayInfo.getFrame().toString());
-        displayModel.setTitle(((TextComponentTranslation) displayInfo.getTitle()).getKey());
-        displayModel.setDescription(((TextComponentTranslation) displayInfo.getDescription()).getKey());
+        displayModel.setTitle(context.parseTranslateModel(displayInfo.getTitle()));
+        displayModel.setDescription(context.parseTranslateModel(displayInfo.getDescription()));
         achievementModel.setDisplay(displayModel);
+
+        TextComponentTranslation translation = new TextComponentTranslation(
+                achievementModel.getTranslationKey(displayModel.getFrame()),
+                new TextComponentString(nickname),
+                advancement.getDisplayText()
+        );
+        achievementModel.setTranslation(context.parseTranslateModel(translation));
         return achievementModel;
     }
 
-    /** 调用原版方法反序列化Json文本组件, 并将异常输出到日志
-     * @param jsonElement 消息体
-     * @return 文本组件, 或null如果解析出错
-     */
-    public static ITextComponent parseJsonToTextWrapped(JsonElement jsonElement) {
-        try {
-            return ITextComponent.Serializer.fromJsonLenient(jsonElement.toString());
-        } catch (Throwable e) {
-            GlobalContext.getLogger().error("Error handling Broadcast Message {} : ", jsonElement, e);
-        }
-        return null;
+    public static ITextComponent buildComponent(JsonElement jsonElement) {
+        return ITextComponent.Serializer.fromJsonLenient(jsonElement.toString());
     }
 }
 ```
 
+:::
+
+::: tip
+`getForgeAchievement` 依赖 `PlatformContext` 的翻译服务，因此调用时需要传入当前上下文。
 :::

@@ -1,68 +1,134 @@
 # 命令
 
-此处只举例 `reload` 命令，其他命令请参考源码。
+::: tip 版本提示
+适用于 **QueQiao Core 0.7.0-beta.4** 及以上版本。`SubCommand` / `AbstractCommand` / `ReloadCommandAbstract` 等旧命令类已被移除。
+:::
 
-## reload
+命令树由 core 提供（`help`、`reload`、`server`、`client` 等内置子命令），平台侧只需要把 core 的命令树映射到自己的命令 API。
 
-- 继承 `ReconnectCommandAbstract` 并实现服务端的命令接口
-- 在目前示例的 `1.12.2`中，`forge` 的命令需要继承 `BaseCommand` 类而非实现接口，可以查看 [参考](#参考)。
-- 在高版本中可以使用如下方案直接实现。`ReloadCommandAbstract` 已经实现了命令的主要逻辑，只需要在 `onCommand` 方法判断权限并中调用 `execute` 方法即可。
+## 两种接入方式
+
+### 1. 运行时已启动：createCommandRouter
+
+适合大多数平台（Bukkit、Velocity、Forge 1.12.2 等）：
 
 ```java
-public class ReloadCommand extends ReloadCommandAbstract implements ForgeSubCommand {
-    @Override
-    public int onCommand(CommandContext<net.minecraft.commands.CommandSourceStack> context) {
-        if (!GlobalContext.getHandleCommandReturnMessageService().hasPermission(context, getPermissionNode())) return 0;
-        execute(context, true);
-        return Command.SINGLE_SUCCESS;
-    }
-}
+CommandRouter<ICommandSender> router = runtime.createCommandRouter();
+router.execute(new ForgeCommandContext(sender), args);
+router.tabComplete(new ForgeCommandContext(sender), args);
 ```
+
+- 路由依赖运行时状态，因此按当前 `QueQiaoRuntime` 实例惰性创建并缓存；运行时重建后需要重新创建。
+
+### 2. 平台使用 Brigadier：createDeferredCommandTree
+
+Forge 1.18+、NeoForge、Fabric 等可以在运行时启动前构建完整命令树：
+
+```java
+RootCommand<CommandSourceStack> root = QueQiaoRuntime.createDeferredCommandTree(LOGGER, QueQiao::getRuntime);
+event.getDispatcher().register(registerCommand(root));
+```
+
+- 命令树内部的依赖都以 `Supplier` 注入，只有真正执行命令时才读取运行时。
+- 把 `CommandNode` 递归映射为 `LiteralArgumentBuilder`，执行时调用 `node.execute(上下文, 参数)`。
 
 ## 参考
 
-::: details 点击展开
+::: details Forge 1.12.2：CommandBase
 
 ```java
-package com.github.theword.queqiao.command.subCommand.client;
+package com.github.theword.queqiao.command;
 
-import com.github.theword.queqiao.command.ForgeSubCommand;
-import com.github.theword.queqiao.tool.GlobalContext;
-import com.github.theword.queqiao.tool.command.subCommand.client.ReconnectCommandAbstract;
+import com.github.theword.queqiao.QueQiao;
+import io.github.theword.queqiao.core.command.CommandRouter;
+import io.github.theword.queqiao.core.constant.BaseConstant;
+import io.github.theword.queqiao.core.constant.CommandConstant;
+import io.github.theword.queqiao.core.runtime.QueQiaoRuntime;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
+public class CommandExecutor extends CommandBase {
 
-public class ReconnectCommand extends ForgeSubCommand {
+    private QueQiaoRuntime cachedRuntime;
 
+    private CommandRouter<ICommandSender> cachedRouter;
 
-    public ReconnectCommand() {
-        super(new InnerReconnectCommand());
-    }
-
-    public static class InnerReconnectCommand extends ReconnectCommandAbstract{
-
-    }
     @Override
-    public int onCommand(ICommandSender sender) {
-        return 0;
+    public int getRequiredPermissionLevel() {
+        return CommandConstant.MOD_PERMISSION_LEVEL;
     }
+
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        if(args.length==1) return Collections.singletonList("all");
-        return Collections.emptyList();
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return sender.canUseCommand(getRequiredPermissionLevel(), getName());
     }
+
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender,
+                                          String[] args, @Nullable BlockPos targetPos) {
+        QueQiaoRuntime runtime = QueQiao.getRuntime();
+        if (runtime == null) return Collections.emptyList();
+
+        return router(runtime).tabComplete(new ForgeCommandContext(sender), args);
+    }
+
+    @Override
+    public String getName() {
+        return BaseConstant.COMMAND_HEADER;
+    }
+
+    @Override
+    public String getUsage(ICommandSender sender) {
+        return "/" + BaseConstant.COMMAND_HEADER;
+    }
+
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-        if (!GlobalContext.getHandleCommandReturnMessageService().hasPermission(sender, inner.getPermissionNode())) return;
-        inner.execute(sender, args.length>0 && Objects.equals(args[0], "all"));
+        QueQiaoRuntime runtime = QueQiao.getRuntime();
+        if (runtime == null) {
+            sender.sendMessage(new TextComponentString(CommandConstant.RUNTIME_NOT_READY));
+            return;
+        }
+
+        router(runtime).execute(new ForgeCommandContext(sender), args);
     }
+
+    private CommandRouter<ICommandSender> router(QueQiaoRuntime runtime) {
+        CommandRouter<ICommandSender> current = cachedRouter;
+        if (current != null && cachedRuntime == runtime) {
+            return current;
+        }
+
+        CommandRouter<ICommandSender> created = runtime.createCommandRouter();
+        cachedRuntime = runtime;
+        cachedRouter = created;
+        return created;
+    }
+}
+```
+
+:::
+
+::: details Brigadier 平台：递归映射命令树
+
+```java
+private static LiteralArgumentBuilder<CommandSourceStack> registerCommand(CommandNode<CommandSourceStack> node) {
+    LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal(node.getName());
+    if (node.isRoot()) {
+        builder.requires(source -> source.hasPermission(CommandConstant.MOD_PERMISSION_LEVEL));
+    }
+    builder.executes(context -> node.execute(new ForgeCommandContext(context.getSource()), Collections.emptyList()));
+    for (CommandNode<CommandSourceStack> child : node.getChildren()) {
+        builder.then(registerCommand(child));
+    }
+    return builder;
 }
 ```
 

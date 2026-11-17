@@ -1,161 +1,189 @@
-# API 处理实现
+# 平台上下文实现
 
-将 API 处理接口 `HandleApiService` 实现为 `HandleApiImpl` 类，并在其中编写具体的处理逻辑。
+::: tip 版本提示
+适用于 **QueQiao Core 0.7.0-beta.4** 及以上版本。旧版的 `HandleApiService` / `HandleApiImpl` 已被移除。
+:::
 
-## Broadcast 实现示例
+`PlatformContext` 继承 `AbstractPlatformContext<S, C, P>`，是 core 与具体服务端之间的**唯一接入点**：
 
-```java
-public class HandleApiImpl implements HandleApiService { // 实现 API 处理接口
-    /**
-     * 广播消息
-     *
-     * @param jsonElement 消息体
-     */
-    @Override
-    public void handleBroadcastMessage(JsonElement jsonElement) {
-        // 使用工具类将 JSON 前缀元素解析为文本组件
-        ITextComponent prefixed = ForgeTool.parseJsonToTextWrapped(GlobalContext.getMessagePrefixJsonObject());
-        // 使用工具类将 JSON 聊天信息参数解析为文本组件
-        ITextComponent message = ForgeTool.parseJsonToTextWrapped(jsonElement);
+- `S`：服务端实例类型
+- `C`：消息组件类型（如 Adventure `Component`、`ITextComponent`、Fabric `Text`）
+- `P`：玩家类型
 
-        // 如果消息和前缀均不为空，则向所有在线玩家发送消息
-        if (message != null && prefixed != null) {
-            for (EntityPlayerMP serverPlayer : minecraftServer.getPlayerList().getPlayers()) {
-                serverPlayer.sendMessage(prefixed.appendSibling(message));
-            }
-        }
-    }
+## 必须实现的原语
 
-    // 其他方法省略...
-}
-```
+| 方法 | 说明 |
+| --- | --- |
+| `getServerType()` | 返回 `ServerTypeConstant` 中的规范值，如 `FORGE`、`PAPER` |
+| `getServerVersion()` | 服务端版本 |
+| `jsonToComponent(JsonElement)` | JSON 组件转平台组件 |
+| `getPlayers()` | 在线玩家集合 |
+| `getPlayerName(P)` / `getPlayerUUID(P)` | 玩家标识 |
+| `getPlayerModel(P)` | 玩家模型快照 |
+| `broadcast(C)` | 广播给所有玩家 |
+| `sendPrivateMessage(P, C)` | 发送给指定玩家 |
+
+## 可选能力
+
+- `sendTitleComponent(title, subtitle, fadeIn, stay, fadeOut)`：默认返回 `UNSUPPORTED`。
+- `sendActionBarComponent(C)`：默认返回 `UNSUPPORTED`。
+- `parseTranslateModel(C)`：把平台翻译组件拆成 `TranslateModel`；默认返回 `null`。
+
+## 返回值与前缀
+
+- 所有发送方法返回 `PlatformResult<Void>`，只区分成功/失败。
+- core **不再自动拼接消息前缀**，由平台实现自行处理（参考下方的 `withPrefix`）。
+
+## 线程契约
+
+Core 不保证调用线程：WebSocket 工作线程也可能直接进入这些方法。如果平台 API 要求主线程/Region 线程，需要平台侧自行调度。
 
 ## 参考
 
 ::: details 点击展开
 
 ```java
-package com.github.theword.queqiao.handle;
+package com.github.theword.queqiao;
 
-import com.github.theword.queqiao.tool.GlobalContext;
-import com.github.theword.queqiao.tool.handle.HandleApiService;
-import com.github.theword.queqiao.tool.response.PrivateMessageResponse;
 import com.github.theword.queqiao.utils.ForgeTool;
 import com.google.gson.JsonElement;
+import io.github.theword.queqiao.core.constant.ServerTypeConstant;
+import io.github.theword.queqiao.core.event.model.PlayerModel;
+import io.github.theword.queqiao.core.event.model.TranslateModel;
+import io.github.theword.queqiao.core.platform.AbstractPlatformContext;
+import io.github.theword.queqiao.core.platform.PlatformResult;
+import io.github.theword.queqiao.core.runtime.QueQiaoRuntime;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.network.play.server.SPacketTitle;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
+import java.util.Collection;
 import java.util.UUID;
 
-import static com.github.theword.queqiao.QueQiao.minecraftServer;
-import static com.github.theword.queqiao.utils.ForgeTool.getForgePlayer;
+public class PlatformContext extends AbstractPlatformContext<MinecraftServer, ITextComponent, EntityPlayerMP> {
 
-
-public class HandleApiImpl implements HandleApiService {
     /**
-     * 广播消息
-     *
-     * @param jsonElement 消息体
+     * 由 QueQiao 在 Runtime 创建后回填，用于读取消息前缀。
      */
-    @Override
-    public void handleBroadcastMessage(JsonElement jsonElement) {
-        ITextComponent prefixed = ForgeTool.parseJsonToTextWrapped(GlobalContext.getMessagePrefixJsonObject());
-        ITextComponent message = ForgeTool.parseJsonToTextWrapped(jsonElement);
-        if (message != null && prefixed != null) {
-            for (EntityPlayerMP serverPlayer : minecraftServer.getPlayerList().getPlayers()) {
-                serverPlayer.sendMessage(prefixed.appendSibling(message));
-            }
-        }
+    private volatile QueQiaoRuntime runtime;
+
+    public PlatformContext(MinecraftServer server) {
+        super(server);
     }
 
+    public void bindRuntime(QueQiaoRuntime runtime) {
+        this.runtime = runtime;
+    }
 
-    /**
-     * 广播 Send Title 消息
-     *
-     * @param titleJsonElement    Title 消息体
-     * @param subtitleJsonElement Subtitle 消息体
-     * @param fadein              Title 淡入时间
-     * @param stay                Title 停留时间
-     * @param fadeout             Title 淡出时间
-     */
+    public QueQiaoRuntime getRuntime() {
+        return runtime;
+    }
+
     @Override
-    public void handleSendTitleMessage(JsonElement titleJsonElement, JsonElement subtitleJsonElement, int fadein, int stay, int fadeout) {
+    public String getServerType() {
+        return ServerTypeConstant.FORGE;
+    }
 
-        if (titleJsonElement != null && !titleJsonElement.isJsonNull()) {
-            ITextComponent title = ForgeTool.parseJsonToTextWrapped(titleJsonElement);
-            sendPacket(new SPacketTitle(
-                    SPacketTitle.Type.TITLE,
-                    title,
-                    fadein,
-                    stay,
-                    fadeout
-            ));
-        }
+    @Override
+    public String getServerVersion() {
+        return server.getMinecraftVersion();
+    }
 
-        if (subtitleJsonElement != null && !subtitleJsonElement.isJsonNull()) {
-            ITextComponent subtitle = ForgeTool.parseJsonToTextWrapped(subtitleJsonElement);
-            sendPacket(new SPacketTitle(
-                    SPacketTitle.Type.SUBTITLE,
-                    subtitle,
-                    fadein,
-                    stay,
-                    fadeout
-            ));
+    @Override
+    public ITextComponent jsonToComponent(JsonElement json) {
+        return ForgeTool.buildComponent(json);
+    }
+
+    @Override
+    public Collection<EntityPlayerMP> getPlayers() {
+        return server.getPlayerList().getPlayers();
+    }
+
+    @Override
+    public String getPlayerName(EntityPlayerMP player) {
+        return player.getName();
+    }
+
+    @Override
+    public UUID getPlayerUUID(EntityPlayerMP player) {
+        return player.getUniqueID();
+    }
+
+    @Override
+    public PlayerModel getPlayerModel(EntityPlayerMP player) {
+        return ForgeTool.getForgePlayer(player);
+    }
+
+    @Override
+    public PlatformResult<Void> broadcast(ITextComponent component) {
+        sendPacket(new SPacketChat(withPrefix(component), ChatType.SYSTEM));
+        return PlatformResult.success(null);
+    }
+
+    @Override
+    public PlatformResult<Void> sendPrivateMessage(EntityPlayerMP player, ITextComponent component) {
+        player.sendMessage(withPrefix(component));
+        return PlatformResult.success(null);
+    }
+
+    @Override
+    public PlatformResult<Void> sendTitleComponent(ITextComponent title, ITextComponent subtitle,
+                                                   int fadeIn, int stay, int fadeOut) {
+        if (title != null) {
+            sendPacket(new SPacketTitle(SPacketTitle.Type.TITLE, title, fadeIn, stay, fadeOut));
         }
+        if (subtitle != null) {
+            sendPacket(new SPacketTitle(SPacketTitle.Type.SUBTITLE, subtitle, fadeIn, stay, fadeOut));
+        }
+        return PlatformResult.success(null);
+    }
+
+    @Override
+    public PlatformResult<Void> sendActionBarComponent(ITextComponent component) {
+        sendPacket(new SPacketTitle(SPacketTitle.Type.ACTIONBAR, component));
+        return PlatformResult.success(null);
     }
 
     /**
-     * 广播 Action Bar 消息
-     *
-     * @param jsonElement Action Bar 消息体
+     * 把 MC 的翻译组件拆成 TranslateModel，翻译文本由平台翻译服务提供。
      */
     @Override
-    public void handleSendActionBarMessage(JsonElement jsonElement) {
-        ITextComponent msg = ForgeTool.parseJsonToTextWrapped(jsonElement);
-        if (msg != null) {
-            sendPacket(new SPacketTitle(SPacketTitle.Type.ACTIONBAR, msg));
+    public TranslateModel parseTranslateModel(ITextComponent component) {
+        if (!(component instanceof TextComponentTranslation)) {
+            return new TranslateModel(null, null, component.getUnformattedText());
         }
+
+        TextComponentTranslation translation = (TextComponentTranslation) component;
+        return buildTranslateModel(
+                translation.getKey(),
+                translation.getFormatArgs(),
+                arg -> arg instanceof ITextComponent
+                        ? parseTranslateModel((ITextComponent) arg)
+                        : new TranslateModel(null, null, String.valueOf(arg)),
+                component.getUnformattedText()
+        );
     }
 
     /**
-     * 私聊消息
-     *
-     * @param nickname    目标玩家名称
-     * @param uuid        目标玩家 UUID
-     * @param jsonElement 消息体
+     * 按配置拼接消息前缀。
      */
-    @Override
-    public PrivateMessageResponse handleSendPrivateMessage(String nickname, UUID uuid, JsonElement jsonElement) {
-        EntityPlayerMP targetPlayer;
-        if (uuid != null)
-            targetPlayer = minecraftServer.getPlayerList().getPlayerByUUID(uuid);
-        else if (nickname != null && !nickname.isEmpty())
-            targetPlayer = minecraftServer.getPlayerList().getPlayerByUsername(nickname);
-        else {
-            return PrivateMessageResponse.playerNotFound();
+    private ITextComponent withPrefix(ITextComponent component) {
+        QueQiaoRuntime current = runtime;
+        JsonElement prefix = current == null ? null : current.getMessagePrefixJsonElement();
+        if (prefix == null) {
+            return component;
         }
-
-        if (targetPlayer == null) {
-            return PrivateMessageResponse.playerIsNull();
-        }
-
-        if (targetPlayer.hasDisconnected()) {
-            return PrivateMessageResponse.playerNotOnline();
-        }
-
-        ITextComponent prefixed = ForgeTool.parseJsonToTextWrapped(GlobalContext.getMessagePrefixJsonObject());
-        ITextComponent message = ForgeTool.parseJsonToTextWrapped(jsonElement);
-        if (message != null && prefixed != null) {
-            targetPlayer.sendMessage(prefixed.appendSibling(message));
-        }
-        return PrivateMessageResponse.sendSuccess(getForgePlayer(targetPlayer));
+        return ForgeTool.buildComponent(prefix).appendSibling(component);
     }
 
     private void sendPacket(Packet<?> packet) {
-        for (EntityPlayerMP serverPlayer : minecraftServer.getPlayerList().getPlayers()) {
-            serverPlayer.connection.sendPacket(packet);
+        for (EntityPlayerMP player : getPlayers()) {
+            player.connection.sendPacket(packet);
         }
     }
 }

@@ -13,6 +13,10 @@ actions:
     link: /deploy/
     type: primary
 
+  - text: 直连版本 mcqq
+    link: https://github.com/17TheWord/mcqq
+    type: secondary
+
 features:
   - title: 统一玩家事件分发
     details: 支持玩家聊天、加入、离开、命令、成就、死亡事件并统一各端事件结构

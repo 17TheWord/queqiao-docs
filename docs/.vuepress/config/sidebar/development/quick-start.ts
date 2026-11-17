@@ -22,8 +22,8 @@ export default [
         text: 'handle',
         collapsible: true,
         children: [
-            { text: 'API 处理实现', link: '/development/quick-start/handle/api' },
-            { text: '命令返回信息实现', link: '/development/quick-start/handle/command-return' },
+            { text: '平台上下文实现', link: '/development/quick-start/handle/api' },
+            { text: '命令执行上下文', link: '/development/quick-start/handle/command-return' },
         ]
     },
     {
